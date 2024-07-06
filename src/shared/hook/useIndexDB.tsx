@@ -6,7 +6,7 @@ export default function useIndexDB(
 ) {
   const setIndexedDb = async (
     INDEXEDB_STORE_VALUE_KEY: string,
-    values: any[]
+    values: any
   ) => {
     const indexedDb = new IndexedDb(INDEXEDDB_KEY);
     await indexedDb.createObjectStore([INDEXEDDB_STORE_KEY]);
