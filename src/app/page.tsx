@@ -1,3 +1,5 @@
+'use client'
+
 import useIndexDB from "@/shared/hook/useIndexDB";
 import useWorker from "@/shared/hook/useWorker";
 import dayjs from "dayjs";
