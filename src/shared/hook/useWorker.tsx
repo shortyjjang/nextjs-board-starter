@@ -2,7 +2,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 
 type UseWorkerResult = [
   result: string[] | null,
-  postMessage: (message: PostReaquestBody, token:string) => void,
+  postMessage: (message: PostReaquestBody) => void,
 ];
 
 const useWorker = ({ url }: { url: string }): UseWorkerResult => {
@@ -21,10 +21,9 @@ const useWorker = ({ url }: { url: string }): UseWorkerResult => {
     };
   }, [url]);
 
-  const postMessage = useCallback((list: PostReaquestBody, token:string) => {
+  const postMessage = useCallback((post: PostReaquestBody) => {
     if (workerRef.current) workerRef.current.postMessage({
-        list,
-        token
+        post
     });
   }, []);
 
