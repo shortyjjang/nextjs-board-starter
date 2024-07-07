@@ -23,13 +23,13 @@ export default function useQuery({
     const token = Cookies.get("accessToken");
     const response =
       method === "GET"
-        ? await axios.get("https://qa-yesus-api.a2dcorp.co.kr" + url, {
+        ? await axios.get( url, {
             params: body,
             headers: requiredToken ? {
               Authorization: token,
             } : {},
           })
-        : await axios.post("https://qa-yesus-api.a2dcorp.co.kr" + url, body, {
+        : await axios.post(url, body, {
             headers: requiredToken ? {
               Authorization: token,
             } : {},

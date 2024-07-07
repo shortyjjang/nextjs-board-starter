@@ -1,15 +1,16 @@
 
 import useQuery from "@/shared/hook/useQuery";
 import { useRouter } from "next/navigation";
-import { createContext, useEffect } from "react";
+import { useEffect } from "react";
+import DefaultList from "./default";
+import { BoardContext } from "@/shared/context/board";
 
 
-export const BoardContext = createContext<BoardContextProps>({} as BoardContextProps);
 
-export default function BoardWrapper({
-  children,
+export default function List({
+  managementId,
 }: {
-  children: React.ReactNode;
+  managementId: number;
 }) {
   const router = useRouter();
   const {
@@ -20,7 +21,7 @@ export default function BoardWrapper({
     error: string;
     refetch: () => void;
   } = useQuery({
-    url: `/api/board/v1/management/${2}`,
+    url: `/api/board/v1/management/${managementId}`,
     method: "GET",
   });
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function BoardWrapper({
         ...bbsInfo,
       }}
     >
-      {children}
+      {bbsInfo?.markType === 'LIST' && <DefaultList />}
     </BoardContext.Provider>
   );
 }
