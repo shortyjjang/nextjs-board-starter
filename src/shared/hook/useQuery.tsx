@@ -23,13 +23,13 @@ export default function useQuery({
     const token = Cookies.get("accessToken");
     const response =
       method === "GET"
-        ? await axios.get( url, {
+        ? await axios.get(process.env.NEXT_PUBLIC_API_URL + url, {
             params: body,
             headers: requiredToken ? {
               Authorization: token,
             } : {},
           })
-        : await axios.post(url, body, {
+        : await axios.post(process.env.NEXT_PUBLIC_API_URL +url, body, {
             headers: requiredToken ? {
               Authorization: token,
             } : {},
@@ -42,7 +42,7 @@ export default function useQuery({
     }
     setData(response.data.content);
     setIsLoading(false);
-  }, [body, method, url]);
+  }, [body, method, requiredToken, url]);
 
   useEffect(() => {
     const token = Cookies.get("accessToken");

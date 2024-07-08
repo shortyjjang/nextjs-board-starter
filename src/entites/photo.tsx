@@ -6,11 +6,17 @@ function Photo(
     setFiles,
     deleteFileId,
     setDeleteFileId,
+    id,
+    readOnly,
+    disabled,
   }: {
     files: File[];
     setFiles: (files: File[]) => void;
     deleteFileId?: number[];
     setDeleteFileId?: (deleteFileId: number[]) => void;
+    id?: string;
+    readOnly?: boolean;
+    disabled?: boolean;
   },
   ref: React.Ref<HTMLInputElement>
 ) {
@@ -29,13 +35,15 @@ function Photo(
   >([]);
   return (
     <div>
-      <input
+      {(!readOnly && !disabled) && <input
         ref={ref}
         type="file"
         accept="image/*"
+        value=''
+        id={id}
         onChange={(e) => {
           if (e.target.files) {
-            setFiles([...files, e.target.files[0]]);
+            setFiles([ e.target.files[0],...files,]);
             setImgPath([
               ...imgPath,
               {
@@ -47,11 +55,12 @@ function Photo(
             ]);
           }
         }}
-      />
+      />}
       {imgPath.map((img) => (
         <div
           key={img.id}
           onClick={() => {
+            if(readOnly || disabled) return;
             setFiles(files.filter((file) => file.name !== img.name));
             if (img.path && setDeleteFileId && deleteFileId) {
               setDeleteFileId([...deleteFileId, img.id]);

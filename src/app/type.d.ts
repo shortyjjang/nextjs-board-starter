@@ -66,7 +66,7 @@ interface BoardContextProps {
   reviewPoint: {};
 }
 
-type BoardContextProps = {
+interface BoardContextProps {
   id: number;
   name: string;
   markType: string;
@@ -96,8 +96,7 @@ type BoardContextProps = {
     name: string;
   }[];
   reviewPoint: {};
-};
-
+}
 type boardListRequestProps = {
   categoryId?: number;
   contents?: string;
@@ -129,3 +128,5 @@ type boardListType = {
   categoryId: number;
   viewCount: number;
 }
+
+type boardType = 'LIST' | 'VIEW' | 'WRITE' | 'EDIT'

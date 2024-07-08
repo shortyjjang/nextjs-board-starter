@@ -6,10 +6,16 @@ function Select(
     value,
     onChange,
     options,
+    id,
+    readOnly,
+    disabled,
   }: {
-    value: string;
-    onChange: (value: string) => void;
-    options: { label: string; value: string }[];
+    value: string | number;
+    onChange: (value: string | number) => void;
+    options: { label: string; value: string | number }[];
+    id?: string;
+    readOnly?: boolean;
+    disabled?: boolean;
   },
   ref: React.Ref<HTMLInputElement>
 ) {
@@ -19,8 +25,10 @@ function Select(
       <span className="relative">
         <i className="absolute w-4 h-4 border-r border-b border-black rotate-45 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></i>
         <input
-          value={value}
-          readOnly
+          value={options.find((option) => option.value === value)?.label || ""}
+          readOnly={true}
+          disabled={disabled}
+          id={id}
           className="w-full h-full px-10 py-6 cursor-pointer bg-white border border-black"
           onClick={dropdown.toggle}
           ref={ref}
@@ -33,7 +41,7 @@ function Select(
               key={value}
               className="cursor-pointer px-10 py-6 hover:underline text-graycolor hover:text-black"
               onClick={() => {
-                onChange(value);
+                if(!readOnly && !disabled) onChange(value);
                 dropdown.toggle();
               }}
             >

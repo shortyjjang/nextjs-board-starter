@@ -1,13 +1,12 @@
 import React, { forwardRef } from "react";
 
-function Input(
+function Textarea(
   {
     onChange,
     value,
     id,
     readOnly,
     disabled,
-    placehoder,
     ...HTMLInputElementProps
   }: {
     onChange: (value: string) => void;
@@ -15,22 +14,19 @@ function Input(
     id?: string;
     readOnly?: boolean;
     disabled?: boolean;
-    placehoder?: string;
   },
-  ref: React.Ref<HTMLInputElement>
+  ref: React.Ref<HTMLTextAreaElement>
 ) {
   return (
-    <input
+    <textarea
       ref={ref}
-      type="text"
       value={value}
       onChange={(e) => onChange(e.target.value)}
       {...HTMLInputElementProps}
       readOnly={readOnly}
       disabled={disabled}
       id={id}
-      placeholder={placehoder}
     />
   );
 }
-export default forwardRef(Input);
+export default forwardRef(Textarea);
