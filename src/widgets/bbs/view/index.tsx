@@ -1,4 +1,4 @@
-import { BoardContext } from "@/shared/context/board";
+import { BbsContext } from "@/widgets/bbs/board.context";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import React, { useContext, useEffect } from "react";
@@ -21,7 +21,7 @@ export default function Detail({
     viewCountUseYn,
     voteUseYn,
     readRole,
-  } = useContext(BoardContext);
+  } = useContext(BbsContext);
   const articleId = useParams().id;
   const router = useRouter();
   const {

@@ -1,7 +1,7 @@
 "use client";
 
 import { BOARD_TYPES } from "@/app/enum";
-import Board from "@/widgets/board";
+import Board from "@/widgets/bbs";
 import { useParams } from "next/navigation";
 
 export default function PostEdit() {

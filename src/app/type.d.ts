@@ -16,7 +16,7 @@ type postProps = {
 };
 
 
-interface boardContextProps {
+interface bbsContextProps {
   id: number;
   name: string;
   markType: string;
@@ -95,7 +95,7 @@ type pagingState = {
   totalPagesCount: number;
   lists: any[];
 }
-type listContextType = {
+type bbsListContextProps = {
   lists: boardListType[];
   totalCount: number;
   totalPagesCount: number;

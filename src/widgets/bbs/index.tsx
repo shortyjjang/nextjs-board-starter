@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import List from "./list";
-import { BoardContext } from "@/shared/context/board";
+import List from "./list/provider";
+import { BbsContext } from "@/widgets/bbs/board.context";
 import DefaultDetail from "./view/default";
 import Write from "./write";
 import Detail from "./view";
@@ -19,11 +19,11 @@ export default function Board({
     data: bbsInfo,
     isSuccess,
   }: {
-    data: boardContextProps;
+    data: bbsContextProps;
     isSuccess: boolean;
   } = useFetch(`/api/board/v1/management/${managementId}`, {}, false, "GET");
   return (
-    <BoardContext.Provider
+    <BbsContext.Provider
       value={{
         ...bbsInfo,
       }}
@@ -39,6 +39,6 @@ export default function Board({
       ) : (
         <div>로딩중...</div>
       )}
-    </BoardContext.Provider>
+    </BbsContext.Provider>
   );
 }

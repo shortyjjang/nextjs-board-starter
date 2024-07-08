@@ -1,7 +1,7 @@
 import React, { FormEvent, useContext, useEffect, useId, useReducer, useState } from "react";
 import Input from "@/entites/input";
 import Select from "@/entites/select";
-import { BoardContext } from "@/shared/context/board";
+import { BbsContext } from "@/widgets/bbs/board.context";
 import Textarea from "@/entites/textarea";
 import Checkbox from "@/entites/checkbox";
 import Photo from "@/entites/photo";
@@ -61,7 +61,7 @@ export default function Write({
   defaultPost?: postProps
 }) {
   const id = useId();
-  const {categoryList, defaultTitle, defaultContents, categoryUseYn, secretUseYn, fileUploadUseYn, scoreUseYn } = useContext(BoardContext)
+  const {categoryList, defaultTitle, defaultContents, categoryUseYn, secretUseYn, fileUploadUseYn, scoreUseYn } = useContext(BbsContext)
   const [state, dispatch] = useReducer(reducer, INITIAL_POST)
   const [post, setPost] = useState<any>(INITIAL_POST);
   const createPost = async (e: FormEvent<HTMLFormElement>) => {

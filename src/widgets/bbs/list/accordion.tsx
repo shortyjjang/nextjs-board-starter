@@ -1,12 +1,12 @@
-import { BoardContext } from "@/shared/context/board";
+import { BbsContext } from "@/widgets/bbs/board.context";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
-import ListHeader from "./listHeader";
+import ListHeader from "./item";
 import axios from "axios";
 import useToggle from "@/shared/hook/useToggle";
 
-export default function AccordionList(list: boardListType) {
-  const bbsInfo = useContext(BoardContext);
+export default function BbsListAccordion(list: boardListType) {
+  const bbsInfo = useContext(BbsContext);
   const post = useRef<postProps | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   const contents = useToggle();

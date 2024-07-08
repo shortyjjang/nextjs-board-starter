@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
-import { BoardContext } from '@/shared/context/board';
+import { BbsContext } from '@/widgets/bbs/board.context';
 import dayjs from 'dayjs';
 
-export default function ListHeader({
+export default function BbsListItem({
     title,
     categoryId,
     createBy,
@@ -10,8 +10,8 @@ export default function ListHeader({
     viewCount,
     voteCount,
     onClick
-}: listHeaderProps) {
-    const bbsInfo = useContext(BoardContext);
+}: bbsListItemProps) {
+    const bbsInfo = useContext(BbsContext);
   return (
     <div onClick={() =>  onClick && onClick()}>
       <div>{title}</div>
@@ -35,6 +35,6 @@ export default function ListHeader({
   )
 }
 
-interface listHeaderProps extends boardListType {
+interface bbsListItemProps extends boardListType {
   onClick?: () => void | Promise<void>;
 }
