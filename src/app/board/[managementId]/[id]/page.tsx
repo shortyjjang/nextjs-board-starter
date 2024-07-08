@@ -2,9 +2,9 @@
 
 import Board from "@/widgets/board";
 import { BOARD_TYPES } from "../../../enum";
+import { useParams } from "next/navigation";
 
 export default function Post() {
-  return (
-    <Board managementId={1} type={BOARD_TYPES.VIEW} />
-  );
+  const { managementId } = useParams();
+  return <Board managementId={Number(managementId)} type={BOARD_TYPES.VIEW} />;
 }

@@ -21,7 +21,7 @@ export default function DefaultDetail() {
   const {
     data: post,
   }: {
-    data: PostProps;
+    data: postProps;
   } = useFetch(
     `/api/board/v1/${id}/${articleId}`,
     {},

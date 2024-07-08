@@ -11,7 +11,7 @@ import useFetch from "@/shared/hook/useFetch";
 export default function Detail({
   type = BOARD_TYPES.VIEW,
 }: {
-  type?: Omit<boardType, 'LIST' | 'WRITE'>;
+  type?: Omit<boardType, "LIST" | "WRITE">;
 }) {
   const {
     id,
@@ -27,11 +27,13 @@ export default function Detail({
   const {
     data: post,
   }: {
-    data: PostProps;
-  } = useFetch(`/api/board/v1/${id}/${articleId}`,
+    data: postProps;
+  } = useFetch(
+    `/api/board/v1/${id}/${articleId}`,
     {},
     readRole === "USER" || readRole === "ADMIN" ? true : false,
-    "GET");
+    "GET"
+  );
   const deletePost = async () => {
     const request = await axios.post(
       `/api/board/v1/${id}/${articleId}`,
@@ -54,36 +56,41 @@ export default function Detail({
     alert("삭제되었습니다.");
     router.push("/");
   };
-  if(type === BOARD_TYPES.VIEW) return (
-    <div>
-      <div>{post?.title}</div>
-      {categoryUseYn === "Y" && (
-        <div>
-          {
-            (categoryList || []).find(
-              (category: { id: number; name: string }) =>
-                category.id === post?.categoryId
-            )?.name
-          }
-        </div>
-      )}
-      <div>{post?.createBy}</div>
-      {registerTimeUseYn === "Y" && (
-        <div>{dayjs(post?.createTime).format("YYYY-MM-DD")}</div>
-      )}
-      {viewCountUseYn === "Y" && <div>{post?.viewCount}</div>}
-      {voteUseYn === "Y" && <div>{post?.voteCount}</div>}
-      <div dangerouslySetInnerHTML={{ __html: post?.contents }} />
-      <button onClick={() => router.push(`/board/${id}`)}>목록</button>
-      {post?.isEditable && (
-        <div>
-          <button onClick={() => router.push(`/board/${id}/${articleId}/edit`)}>수정</button>
-          <button onClick={deletePost}>삭제</button>
-        </div>
-      )}
-    </div>
-  );
-  if(type === BOARD_TYPES.EDIT) {
-    <Write defaultPost={post} />
+  if (type === BOARD_TYPES.VIEW)
+    return (
+      <div>
+        <div>{post?.title}</div>
+        {categoryUseYn === "Y" && (
+          <div>
+            {
+              (categoryList || []).find(
+                (category: { id: number; name: string }) =>
+                  category.id === post?.categoryId
+              )?.name
+            }
+          </div>
+        )}
+        <div>{post?.createBy}</div>
+        {registerTimeUseYn === "Y" && (
+          <div>{dayjs(post?.createTime).format("YYYY-MM-DD")}</div>
+        )}
+        {viewCountUseYn === "Y" && <div>{post?.viewCount}</div>}
+        {voteUseYn === "Y" && <div>{post?.voteCount}</div>}
+        <div dangerouslySetInnerHTML={{ __html: post?.contents }} />
+        <button onClick={() => router.push(`/board/${id}`)}>목록</button>
+        {post?.isEditable && (
+          <div>
+            <button
+              onClick={() => router.push(`/board/${id}/${articleId}/edit`)}
+            >
+              수정
+            </button>
+            <button onClick={deletePost}>삭제</button>
+          </div>
+        )}
+      </div>
+    );
+  if (type === BOARD_TYPES.EDIT) {
+    <Write defaultPost={post} />;
   }
 }

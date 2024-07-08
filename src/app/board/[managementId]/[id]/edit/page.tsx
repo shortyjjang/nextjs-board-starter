@@ -2,10 +2,9 @@
 
 import { BOARD_TYPES } from "@/app/enum";
 import Board from "@/widgets/board";
-
+import { useParams } from "next/navigation";
 
 export default function PostEdit() {
-  return (
-    <Board managementId={1} type={BOARD_TYPES.EDIT} />
-  );
+  const { managementId } = useParams();
+  return <Board managementId={Number(managementId)} type={BOARD_TYPES.EDIT} />;
 }

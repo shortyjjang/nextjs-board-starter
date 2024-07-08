@@ -1,13 +1,6 @@
 import { useEffect, useReducer } from "react";
 import useFetch from "./useFetch";
 
-type pagingState = {
-  currentPage: number;
-  totalCount: number;
-  totalPagesCount: number;
-  lists: any[];
-}
-
 const PAGING_LIST_INITAL = {
   currentPage: 0,
   totalCount: 0,
@@ -15,16 +8,19 @@ const PAGING_LIST_INITAL = {
   lists: [],
 };
 
-const reducer = (state: pagingState, action: {
-  type: "FETCH_INIT" | "FETCH_SUCCESS" | "FETCH_FAILURE";
-  payload?: {
-    currentPage: number;
-    totalCount: number;
-    totalPagesCount: number;
-    lists: any[];
-  };
-}) => {
-  if(action.type === "FETCH_SUCCESS") {
+const reducer = (
+  state: pagingState,
+  action: {
+    type: "FETCH_INIT" | "FETCH_SUCCESS" | "FETCH_FAILURE";
+    payload?: {
+      currentPage: number;
+      totalCount: number;
+      totalPagesCount: number;
+      lists: any[];
+    };
+  }
+) => {
+  if (action.type === "FETCH_SUCCESS") {
     return {
       ...state,
       currentPage: action.payload?.currentPage || 0,
@@ -33,8 +29,8 @@ const reducer = (state: pagingState, action: {
       lists: action.payload?.lists || [],
     };
   }
-  return PAGING_LIST_INITAL
-}
+  return PAGING_LIST_INITAL;
+};
 
 export default function useGetPagination({
   url,
@@ -47,25 +43,37 @@ export default function useGetPagination({
   requiredToken?: boolean;
   method?: "GET" | "POST";
 }) {
-  const { isLoading, isError, isSuccess, data, refetch } = useFetch(url, body, requiredToken, method);
+  const { isLoading, isError, isSuccess, data, refetch } = useFetch(
+    url,
+    body,
+    requiredToken,
+    method
+  );
   const [state, dispatch] = useReducer(reducer, PAGING_LIST_INITAL);
-  
 
   useEffect(() => {
-    dispatch({ type: isLoading ? "FETCH_INIT": 
-      isError ? "FETCH_FAILURE" : 
-      isSuccess ? "FETCH_SUCCESS" : "FETCH_INIT", payload: {
+    dispatch({
+      type: isLoading
+        ? "FETCH_INIT"
+        : isError
+        ? "FETCH_FAILURE"
+        : isSuccess
+        ? "FETCH_SUCCESS"
+        : "FETCH_INIT",
+      payload: {
         currentPage: data?.currentPage,
         totalCount: data?.totalCount,
         totalPagesCount: data?.totalPagesCount,
         lists: data?.contents,
-      }
-     });
+      },
+    });
   }, [isLoading, isError, isSuccess, data]);
 
   return {
-    isLoading, isError, isSuccess,
-    ...state,
+    isLoading,
+    isError,
+    isSuccess,
     refetch,
+    ...state,
   };
 }

@@ -1,3 +1,3 @@
 import { createContext } from "react";
 
-export const BoardContext = createContext<BoardContextProps>({} as BoardContextProps);
+export const BoardContext = createContext<boardContextProps>({} as boardContextProps);

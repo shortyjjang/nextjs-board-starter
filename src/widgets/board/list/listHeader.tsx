@@ -3,32 +3,38 @@ import { BoardContext } from '@/shared/context/board';
 import dayjs from 'dayjs';
 
 export default function ListHeader({
-    list,
+    title,
+    categoryId,
+    createBy,
+    createTime,
+    viewCount,
+    voteCount,
     onClick
-}: {
-    list: boardListType;
-    onClick?: () => void;
-}) {
+}: listHeaderProps) {
     const bbsInfo = useContext(BoardContext);
   return (
     <div onClick={() =>  onClick && onClick()}>
-      <div>{list.title}</div>
+      <div>{title}</div>
       {bbsInfo?.categoryUseYn === "Y" && (
         <div>
           {
             (bbsInfo?.categoryList || []).find(
               (category: { id: number; name: string }) =>
-                category.id === list.categoryId
+                category.id === categoryId
             )?.name
           }
         </div>
       )}
-      <div>{list.createBy}</div>
+      <div>{createBy}</div>
       {bbsInfo?.registerTimeUseYn === "Y" && (
-        <div>{dayjs(list.createTime).format("YYYY-MM-DD")}</div>
+        <div>{dayjs(createTime).format("YYYY-MM-DD")}</div>
       )}
-      {bbsInfo?.viewCountUseYn === "Y" && <div>{list.viewCount}</div>}
-      {bbsInfo?.voteUseYn === "Y" && <div>{list.voteCount}</div>}
+      {bbsInfo?.viewCountUseYn === "Y" && <div>{viewCount}</div>}
+      {bbsInfo?.voteUseYn === "Y" && <div>{voteCount}</div>}
     </div>
   )
+}
+
+interface listHeaderProps extends boardListType {
+  onClick?: () => void | Promise<void>;
 }

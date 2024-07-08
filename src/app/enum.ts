@@ -9,3 +9,9 @@ export const BOARD_TYPES: {
     WRITE: 'WRITE',
     EDIT: 'EDIT',
 }
+export const FETCH_TYPE = {
+  FETCH_INIT: "FETCH_INIT",
+  FETCH_SUCCESS: "FETCH_SUCCESS",
+  FETCH_FAILURE: "FETCH_FAILURE",
+};
+

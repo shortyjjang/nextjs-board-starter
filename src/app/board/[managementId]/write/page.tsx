@@ -1,10 +1,10 @@
-'use client'
-import Board from '@/widgets/board'
-import React from 'react'
-import { BOARD_TYPES } from '../../../enum'
+"use client";
+import Board from "@/widgets/board";
+import React from "react";
+import { BOARD_TYPES } from "../../../enum";
+import { useParams } from "next/navigation";
 
 export default function BoardWriteIndex() {
-  return (
-    <Board managementId={2} type={BOARD_TYPES.WRITE} />
-  )
+  const { managementId } = useParams();
+  return <Board managementId={Number(managementId)} type={BOARD_TYPES.WRITE} />;
 }

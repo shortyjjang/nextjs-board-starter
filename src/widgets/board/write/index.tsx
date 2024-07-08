@@ -58,7 +58,7 @@ const reducer = (state: any, action: any) => {
 export default function Write({
   defaultPost,
 }: {
-  defaultPost?: PostProps
+  defaultPost?: postProps
 }) {
   const id = useId();
   const {categoryList, defaultTitle, defaultContents, categoryUseYn, secretUseYn, fileUploadUseYn, scoreUseYn } = useContext(BoardContext)

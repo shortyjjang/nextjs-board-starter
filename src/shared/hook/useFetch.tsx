@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { FETCH_TYPE } from "@/app/enum";
 
 const FETCH_INITIONAL = {
   isLoading: false,
@@ -10,25 +11,17 @@ const FETCH_INITIONAL = {
   data: null,
 };
 const token = Cookies.get("accessToken");
-
-type fetchState = {
-  isLoading: boolean;
-  isError: boolean;
-  isSuccess: boolean;
-  data: any;
-};
-
 const reducer = (
   state: fetchState,
   action: {
-    type: "FETCH_INIT" | "FETCH_SUCCESS" | "FETCH_FAILURE";
+    type: fetchType;
     payload?: any;
   }
 ) => {
   return {
-    isLoading: action.type === "FETCH_INIT",
-    isError: action.type === "FETCH_FAILURE",
-    isSuccess: action.type === "FETCH_SUCCESS",
+    isLoading: action.type === FETCH_TYPE.FETCH_INIT,
+    isError: action.type === FETCH_TYPE.FETCH_FAILURE,
+    isSuccess: action.type === FETCH_TYPE.FETCH_SUCCESS,
     data: action.payload,
   };
 };
@@ -65,19 +58,21 @@ const useFetch = (
           });
     if (!response || !response.data || response.data.meta?.resultMsg) {
       dispatch({
-        type: "FETCH_FAILURE",
+        type: FETCH_TYPE.FETCH_FAILURE as fetchType,
         payload:
           response.data.meta?.resultMsg || "알 수 없는 오류가 발생했습니다.",
       });
       router.back();
       return;
     }
-    dispatch({ type: "FETCH_SUCCESS", payload: response.data.content });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch({
+      type: FETCH_TYPE.FETCH_SUCCESS as fetchType,
+      payload: response.data.content,
+    });
   }, [body, method, requiredToken, url]);
   useEffect(() => {
     refetch();
-  }, [refetch]);
+  }, []);
 
   return {
     ...state,

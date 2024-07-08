@@ -19,7 +19,7 @@ export default function Board({
     data: bbsInfo,
     isSuccess,
   }: {
-    data: BoardContextProps;
+    data: boardContextProps;
     isSuccess: boolean;
   } = useFetch(`/api/board/v1/management/${managementId}`, {}, false, "GET");
   return (

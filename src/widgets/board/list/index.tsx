@@ -2,17 +2,12 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import useGetPagination from "@/shared/hook/useGetPagination";
 import Cookies from "js-cookie";
 import { BoardContext } from "@/shared/context/board";
-import DefaultList from "./default";
 import Select from "@/entites/select";
 import Input from "@/entites/input";
 import AccordionList from "./accordion";
+import ListHeader from "./listHeader";
 
-export const ListContext = createContext<{
-  lists: boardListType[];
-  totalCount: number;
-  totalPagesCount: number;
-  currentPage: number;
-}>({
+export const ListContext = createContext<listContextType>({
   lists: [],
   totalCount: 0,
   totalPagesCount: 0,
@@ -21,9 +16,7 @@ export const ListContext = createContext<{
 
 export default function List() {
   const bbsInfo = useContext(BoardContext);
-  const [searchType, setSearchType] = useState<
-    "title" | "contents" | "registerName" | "registerId"
-  >("title");
+  const [searchType, setSearchType] = useState<listSearchType>("title");
   const [params, setParams] = useState<boardListRequestProps>({
     managementId: bbsInfo.id,
     page: 1,
@@ -36,13 +29,6 @@ export default function List() {
     currentPage,
     isLoading,
     refetch: get,
-  }: {
-    lists: boardListType[];
-    totalCount: number;
-    totalPagesCount: number;
-    currentPage: number;
-    isLoading: boolean;
-    refetch: () => void;
   } = useGetPagination({
     url: `/api/board/v1`,
     body: params,
@@ -94,13 +80,13 @@ export default function List() {
       {isLoading ? (
         <div>로딩중...</div>
       ) : (
-        <>
-          {bbsInfo?.markType === "LIST" && <DefaultList />}
-          {bbsInfo?.markType === "ACCORDION" &&
-            lists.map((list) => (
-              <AccordionList key={list.articleId} list={list} />
-            ))}
-        </>
+        lists.map((list) =>
+          bbsInfo?.markType === "LIST" ? (
+            <ListHeader key={list.articleId} {...list} />
+          ) : (
+            <AccordionList key={list.articleId} {...list} />
+          )
+        )
       )}
       {(bbsInfo?.writeRole === "NON" ||
         (bbsInfo?.writeRole === "USER" && Cookies.get("accessToken"))) && (
@@ -133,7 +119,7 @@ export default function List() {
           value={searchType || ""}
           onChange={(value) => {
             setSearchType(
-              value as "title" | "contents" | "registerName" | "registerId"
+              value as listSearchType
             );
           }}
         />
