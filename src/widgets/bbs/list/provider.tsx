@@ -1,14 +1,12 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useGetPagination from "@/shared/hook/useGetPagination";
 import Cookies from "js-cookie";
 import { BbsContext, BbsListContext } from "@/widgets/bbs/board.context";
-import Select from "@/entites/select";
-import Input from "@/entites/input";
 import AccordionList from "./accordion";
-import ListHeader from "./item";
 import BbsListSearchText from "./searchText";
 import BbsListPagination from "./pagination";
 import BbsSearchCategory from "./searchCategory";
+import BbsListItem from "./item";
 
 export default function BbsListProvider() {
   const bbsInfo = useContext(BbsContext);
@@ -45,10 +43,6 @@ export default function BbsListProvider() {
         <div>{totalCount}개</div>
         <BbsSearchCategory
           options={[
-            {
-              label: "전체",
-              value: "",
-            },
             ...bbsInfo?.categoryList.map((category) => ({
               label: category.name,
               value: category.id,
@@ -63,7 +57,7 @@ export default function BbsListProvider() {
       ) : (
         lists.map((list) =>
           bbsInfo?.markType === "LIST" ? (
-            <ListHeader key={list.articleId} {...list} />
+            <BbsListItem key={list.articleId} {...list} />
           ) : (
             <AccordionList key={list.articleId} {...list} />
           )
@@ -78,10 +72,10 @@ export default function BbsListProvider() {
           totalPagesCount={totalPagesCount}
           currentPage={currentPage}
           onMovePage={(page) =>
-            setParams({
-              ...params,
+            setParams((prev) => ({
+              ...prev,
               page: page,
-            })
+            }))
           }
         />
       }

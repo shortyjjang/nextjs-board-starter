@@ -1,9 +1,9 @@
 import { BbsContext } from "@/widgets/bbs/board.context";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
-import ListHeader from "./item";
 import axios from "axios";
 import useToggle from "@/shared/hook/useToggle";
+import BbsListItem from "./item";
 
 export default function BbsListAccordion(list: boardListType) {
   const bbsInfo = useContext(BbsContext);
@@ -19,7 +19,7 @@ export default function BbsListAccordion(list: boardListType) {
   },[ref, post, contents])
   return (
     <div>
-      <ListHeader {...list} onClick={async () => {
+      <BbsListItem {...list} onClick={async () => {
         if(!post.current) {
           const request = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/board/v1/${bbsInfo?.id}/${list.articleId}`, {
             headers: (bbsInfo?.readRole === "USER" || bbsInfo?.readRole === "ADMIN") ? {

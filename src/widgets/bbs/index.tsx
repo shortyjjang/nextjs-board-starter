@@ -1,8 +1,6 @@
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+
 import List from "./list/provider";
 import { BbsContext } from "@/widgets/bbs/board.context";
-import DefaultDetail from "./view/default";
 import Write from "./write";
 import Detail from "./view";
 import { BOARD_TYPES } from "@/app/enum";

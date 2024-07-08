@@ -2,6 +2,13 @@ import Input from "@/entites/input";
 import Select from "@/entites/select";
 import { useState } from "react";
 
+const SEARCH_OPTIONS = [
+  { label: "제목", value: "title" },
+  { label: "내용", value: "contents" },
+  { label: "작성자명", value: "registerName" },
+  { label: "작성자아이디", value: "registerId" },
+];
+
 export default function BbsListSearchText({
   searchList,
 }: {
@@ -12,12 +19,7 @@ export default function BbsListSearchText({
   return (
     <form onSubmit={() => searchList(searchType, keyword)}>
       <Select
-        options={[
-          { label: "제목", value: "title" },
-          { label: "내용", value: "contents" },
-          { label: "작성자명", value: "registerName" },
-          { label: "작성자아이디", value: "registerId" },
-        ]}
+        options={SEARCH_OPTIONS}
         value={searchType || ""}
         onChange={(value) => {
           setSearchType(value as listSearchType);

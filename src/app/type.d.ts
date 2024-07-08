@@ -1,4 +1,4 @@
-type postProps = {
+interface postProps {
   id: string;
   managementId: number;
   categoryId: number;

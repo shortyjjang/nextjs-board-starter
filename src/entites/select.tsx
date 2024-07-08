@@ -9,6 +9,7 @@ function Select(
     id,
     readOnly,
     disabled,
+    addAllOption = false,
   }: {
     value: string | number;
     onChange: (value: string | number) => void;
@@ -16,6 +17,7 @@ function Select(
     id?: string;
     readOnly?: boolean;
     disabled?: boolean;
+    addAllOption?: boolean;
   },
   ref: React.Ref<HTMLInputElement>
 ) {
@@ -36,12 +38,21 @@ function Select(
       </span>
       {dropdown.visible && (
         <ul className="absolute top-full -left-px w-full bg-white border border-black box-content py-6">
-          {options.map(({ label, value }) => (
+          {(addAllOption
+            ? [
+                {
+                  label: "전체",
+                  value: "",
+                },
+                ...options,
+              ]
+            : options
+          ).map(({ label, value }) => (
             <li
               key={value}
               className="cursor-pointer px-10 py-6 hover:underline text-graycolor hover:text-black"
               onClick={() => {
-                if(!readOnly && !disabled) onChange(value);
+                if (!readOnly && !disabled) onChange(value);
                 dropdown.toggle();
               }}
             >
