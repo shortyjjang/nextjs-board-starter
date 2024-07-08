@@ -1,7 +1,40 @@
-import React, { useCallback, useEffect } from "react";
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-import axios from "axios";
+import { useEffect, useReducer } from "react";
+import useFetch from "./useFetch";
+
+type pagingState = {
+  currentPage: number;
+  totalCount: number;
+  totalPagesCount: number;
+  lists: any[];
+}
+
+const PAGING_LIST_INITAL = {
+  currentPage: 0,
+  totalCount: 0,
+  totalPagesCount: 0,
+  lists: [],
+};
+
+const reducer = (state: pagingState, action: {
+  type: "FETCH_INIT" | "FETCH_SUCCESS" | "FETCH_FAILURE";
+  payload?: {
+    currentPage: number;
+    totalCount: number;
+    totalPagesCount: number;
+    lists: any[];
+  };
+}) => {
+  if(action.type === "FETCH_SUCCESS") {
+    return {
+      ...state,
+      currentPage: action.payload?.currentPage || 0,
+      totalCount: action.payload?.totalCount || 0,
+      totalPagesCount: action.payload?.totalPagesCount || 0,
+      lists: action.payload?.lists || [],
+    };
+  }
+  return PAGING_LIST_INITAL
+}
 
 export default function useGetPagination({
   url,
@@ -14,58 +47,25 @@ export default function useGetPagination({
   requiredToken?: boolean;
   method?: "GET" | "POST";
 }) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [lists, setLists] = React.useState<any[]>([]);
-  const [error, setError] = React.useState<string>("");
-  const [currentPage, setCurrentPage] = React.useState<number>(0);
-  const [totalCount, setTotalCount] = React.useState<number>(0);
-  const [totalPagesCount, setTotalPagesCount] = React.useState<number>(0);
-  const router = useRouter();
-  const refetch = useCallback(async () => {
-    setIsLoading(true);
-    const token = Cookies.get("accessToken");
-    const response =
-      method === "GET"
-        ? await axios.get(process.env.NEXT_PUBLIC_API_URL +url, {
-            params: body,
-            headers: requiredToken ? {
-              Authorization: token,
-            } : {},
-          })
-        : await axios.post(process.env.NEXT_PUBLIC_API_URL +url, body, {
-            headers: requiredToken ? {
-              Authorization: token,
-            } : {},
-          });
-    if (!response || !response.data || response.data.meta?.resultMsg) {
-      setError(
-        response.data.meta.resultMsg || "알 수 없는 오류가 발생했습니다."
-      );
-      return;
-    }
-    setLists(response.data.content.content);
-    setCurrentPage(response.data.content.currentPage);
-    setTotalCount(response.data.content.totalCount);
-    setTotalPagesCount(response.data.content.totalPagesCount);
-    setIsLoading(false);
-  }, [body, method, url]);
+  const { isLoading, isError, isSuccess, data, refetch } = useFetch(url, body, requiredToken, method);
+  const [state, dispatch] = useReducer(reducer, PAGING_LIST_INITAL);
+  
 
   useEffect(() => {
-    const token = Cookies.get("accessToken");
-    if (requiredToken && !token) {
-      alert("로그인이 필요합니다.");
-      router.push("/login");
-      return;
-    }
-    refetch();
-  }, [body]);
+    dispatch({ type: isLoading ? "FETCH_INIT": 
+      isError ? "FETCH_FAILURE" : 
+      isSuccess ? "FETCH_SUCCESS" : "FETCH_INIT", payload: {
+        currentPage: data?.currentPage,
+        totalCount: data?.totalCount,
+        totalPagesCount: data?.totalPagesCount,
+        lists: data?.contents,
+      }
+     });
+  }, [isLoading, isError, isSuccess, data]);
+
   return {
-    isLoading,
-    lists,
-    error,
+    isLoading, isError, isSuccess,
+    ...state,
     refetch,
-    currentPage,
-    totalCount,
-    totalPagesCount,
   };
 }

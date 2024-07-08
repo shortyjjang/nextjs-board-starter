@@ -1,5 +1,4 @@
 import { BoardContext } from "@/shared/context/board";
-import useQuery from "@/shared/hook/useQuery";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import React, { useContext, useEffect } from "react";
@@ -7,6 +6,7 @@ import Cookies from "js-cookie";
 import dayjs from "dayjs";
 import Write from "../write";
 import { BOARD_TYPES } from "@/app/enum";
+import useFetch from "@/shared/hook/useFetch";
 
 export default function Detail({
   type = BOARD_TYPES.VIEW,
@@ -26,16 +26,12 @@ export default function Detail({
   const router = useRouter();
   const {
     data: post,
-    error,
   }: {
     data: PostProps;
-    error: string;
-    refetch: () => void;
-  } = useQuery({
-    url: `/api/board/v1/${id}/${articleId}`,
-    method: "GET",
-    requiredToken: readRole === "USER" || readRole === "ADMIN" ? true : false,
-  });
+  } = useFetch(`/api/board/v1/${id}/${articleId}`,
+    {},
+    readRole === "USER" || readRole === "ADMIN" ? true : false,
+    "GET");
   const deletePost = async () => {
     const request = await axios.post(
       `/api/board/v1/${id}/${articleId}`,
@@ -58,13 +54,6 @@ export default function Detail({
     alert("삭제되었습니다.");
     router.push("/");
   };
-  useEffect(() => {
-    if (!error) return;
-    alert(error);
-    if (error) {
-      router.push("/");
-    }
-  }, [error, router]);
   if(type === BOARD_TYPES.VIEW) return (
     <div>
       <div>{post?.title}</div>

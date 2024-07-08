@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext, useEffect, useId, useState } from "react";
+import React, { FormEvent, useContext, useEffect, useId, useReducer, useState } from "react";
 import Input from "@/entites/input";
 import Select from "@/entites/select";
 import { BoardContext } from "@/shared/context/board";
@@ -7,6 +7,54 @@ import Checkbox from "@/entites/checkbox";
 import Photo from "@/entites/photo";
 import Radio from "@/entites/radio";
 
+const INITIAL_POST = {
+  title: "",
+  contents: "",
+  categoryId: 0,
+  secretYn: false,
+  fileList: [],
+  deleteFileId: [],
+}
+
+const reducer = (state: any, action: any) => {
+  switch (action.type) {
+    case 'title':
+      return {
+        ...state,
+        title: action.payload,
+      }
+    case 'contents':
+      return {
+        ...state,
+        contents: action.payload,
+      }
+    case 'categoryId':
+      
+      return {
+        ...state,
+        categoryId: action.payload,
+      }
+
+    case 'secretYn':
+      return {
+        ...state,
+        secretYn: action.payload,
+      }
+    case 'fileList':
+      return {
+        ...state,
+        fileList: action.payload,
+      }
+    case 'deleteFileId':
+      return {
+        ...state,
+        deleteFileId: action.payload,
+      }
+    default:
+      INITIAL_POST
+  }
+}
+
 export default function Write({
   defaultPost,
 }: {
@@ -14,12 +62,8 @@ export default function Write({
 }) {
   const id = useId();
   const {categoryList, defaultTitle, defaultContents, categoryUseYn, secretUseYn, fileUploadUseYn, scoreUseYn } = useContext(BoardContext)
-  const [post, setPost] = useState<any>({
-    title: "",
-    contents: "",
-    categoryId: 0,
-    secretYn: false,
-  });
+  const [state, dispatch] = useReducer(reducer, INITIAL_POST)
+  const [post, setPost] = useState<any>(INITIAL_POST);
   const createPost = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   }
@@ -36,16 +80,9 @@ export default function Write({
     }))
 
     return () => {
-      setPost({
-        title: "",
-        contents: "",
-        categoryId: 0,
-        secretYn: false,
-        fileList: [],
-        deleteFileId: [],
-      });
+      setPost(INITIAL_POST);
     }
-  }, [defaultPost]);
+  }, [defaultContents, defaultPost, defaultTitle]);
   return (
     <form onSubmit={createPost}>
       <div>

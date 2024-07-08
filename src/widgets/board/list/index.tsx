@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import useGetPagination from "@/shared/hook/useGetPagination";
 import Cookies from "js-cookie";
-import dayjs from "dayjs";
 import { BoardContext } from "@/shared/context/board";
 import DefaultList from "./default";
 import Select from "@/entites/select";
@@ -11,13 +9,11 @@ import AccordionList from "./accordion";
 
 export const ListContext = createContext<{
   lists: boardListType[];
-  isLoading: boolean;
   totalCount: number;
   totalPagesCount: number;
   currentPage: number;
 }>({
   lists: [],
-  isLoading: false,
   totalCount: 0,
   totalPagesCount: 0,
   currentPage: 0,
@@ -25,7 +21,6 @@ export const ListContext = createContext<{
 
 export default function List() {
   const bbsInfo = useContext(BoardContext);
-  const router = useRouter();
   const [searchType, setSearchType] = useState<
     "title" | "contents" | "registerName" | "registerId"
   >("title");
@@ -36,19 +31,17 @@ export default function List() {
   });
   const {
     lists,
-    isLoading,
     totalCount,
     totalPagesCount,
     currentPage,
-    error: bbsError,
+    isLoading,
     refetch: get,
   }: {
     lists: boardListType[];
-    isLoading: boolean;
     totalCount: number;
     totalPagesCount: number;
     currentPage: number;
-    error: string;
+    isLoading: boolean;
     refetch: () => void;
   } = useGetPagination({
     url: `/api/board/v1`,
@@ -62,16 +55,10 @@ export default function List() {
   useEffect(() => {
     get();
   }, [params, get]);
-  useEffect(() => {
-    if (!bbsError) return;
-    alert(bbsError);
-    router.push("/");
-  }, [bbsError, router]);
   return (
     <ListContext.Provider
       value={{
         lists,
-        isLoading,
         totalCount,
         totalPagesCount,
         currentPage,
@@ -91,20 +78,30 @@ export default function List() {
             })),
           ]}
           value={params.categoryId || ""}
-          onChange={(value) =>{
-            let pa:boardListRequestProps = { ...params, categoryId: value as number };
+          onChange={(value) => {
+            let pa: boardListRequestProps = {
+              ...params,
+              categoryId: value as number,
+            };
 
-            if(value === "") {
+            if (value === "") {
               delete pa.categoryId;
             }
-            setParams(pa)
+            setParams(pa);
           }}
         />
       </div>
-      {bbsInfo?.markType === "LIST" && <DefaultList />}
-      {bbsInfo?.markType === "ACCORDION" && lists.map((list) => (
-        <AccordionList key={list.articleId} list={list} />
-      ))}
+      {isLoading ? (
+        <div>로딩중...</div>
+      ) : (
+        <>
+          {bbsInfo?.markType === "LIST" && <DefaultList />}
+          {bbsInfo?.markType === "ACCORDION" &&
+            lists.map((list) => (
+              <AccordionList key={list.articleId} list={list} />
+            ))}
+        </>
+      )}
       {(bbsInfo?.writeRole === "NON" ||
         (bbsInfo?.writeRole === "USER" && Cookies.get("accessToken"))) && (
         <button>글쓰기</button>
@@ -133,7 +130,7 @@ export default function List() {
             { label: "작성자명", value: "registerName" },
             { label: "작성자아이디", value: "registerId" },
           ]}
-          value={searchType || ''}
+          value={searchType || ""}
           onChange={(value) => {
             setSearchType(
               value as "title" | "contents" | "registerName" | "registerId"

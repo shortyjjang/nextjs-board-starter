@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import dayjs from "dayjs";
 import { BoardContext } from "@/shared/context/board";
 import { ListContext } from ".";
 import ListHeader from "./listHeader";
