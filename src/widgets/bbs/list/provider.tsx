@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import  { useContext, useEffect, useState } from "react";
 import useGetPagination from "@/shared/hook/useGetPagination";
 import Cookies from "js-cookie";
 import { BbsContext, BbsListContext } from "@/widgets/bbs/board.context";
@@ -7,9 +7,11 @@ import BbsListSearchText from "./searchText";
 import BbsListPagination from "./pagination";
 import BbsSearchCategory from "./searchCategory";
 import BbsListItem from "./item";
+import { useRouter } from "next/navigation";
 
 export default function BbsListProvider() {
   const bbsInfo = useContext(BbsContext);
+  const router = useRouter();
   const [params, setParams] = useState<boardListRequestProps>({
     managementId: bbsInfo.id,
     page: 1,
@@ -27,8 +29,9 @@ export default function BbsListProvider() {
     body: params,
     method: "POST",
   });
-  useEffect(() => {
+  useEffect(function onLoad(){
     get();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
   return (
     <BbsListContext.Provider
@@ -57,7 +60,9 @@ export default function BbsListProvider() {
       ) : (
         lists.map((list) =>
           bbsInfo?.markType === "LIST" ? (
-            <BbsListItem key={list.articleId} {...list} />
+            <BbsListItem onClick={() => {
+              router.push(`/board/${bbsInfo.id}/${list.articleId}`)
+            }} key={list.articleId} {...list} />
           ) : (
             <AccordionList key={list.articleId} {...list} />
           )
@@ -90,3 +95,4 @@ export default function BbsListProvider() {
     </BbsListContext.Provider>
   );
 }
+BbsListProvider.displayName = "BbsListProvider";

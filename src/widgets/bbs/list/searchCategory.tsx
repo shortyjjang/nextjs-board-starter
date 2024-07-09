@@ -1,4 +1,5 @@
 import Select from "@/entites/select";
+import { Dispatch, SetStateAction } from "react";
 
 export default function BbsSearchCategory({
   options,
@@ -6,7 +7,7 @@ export default function BbsSearchCategory({
   categoryId,
 }: {
   options: { label: string; value: string | number }[];
-  setParams: React.Dispatch<React.SetStateAction<boardListRequestProps>>;
+  setParams: Dispatch<SetStateAction<boardListRequestProps>>;
   categoryId: number;
 }) {
   return (
@@ -29,3 +30,4 @@ export default function BbsSearchCategory({
     />
   );
 }
+BbsSearchCategory.displayName = "BbsSearchCategory";

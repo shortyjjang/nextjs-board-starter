@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import  { useContext } from "react";
 import { BbsContext } from "@/widgets/bbs/board.context";
 import dayjs from "dayjs";
 
@@ -44,3 +44,5 @@ export default function BbsListItem({
 interface bbsListItemProps extends boardListType {
   onClick?: () => void | Promise<void>;
 }
+
+BbsListItem.displayName = "BbsListItem";

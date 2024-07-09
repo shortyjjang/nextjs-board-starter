@@ -1,4 +1,4 @@
-import React, { useId } from "react";
+import  { useId } from "react";
 import Checkbox from "./checkbox";
 
 export default function CheckboxGroup({
@@ -32,3 +32,4 @@ export default function CheckboxGroup({
     </div>
   );
 }
+CheckboxGroup.displayName = "CheckboxGroup";

@@ -9,3 +9,7 @@ export const BbsListContext = createContext<bbsListContextProps>({
   totalPagesCount: 0,
   currentPage: 0,
 });
+
+type BbsDetailContextProps = Partial<postProps>;
+
+export const BbsDetailContext = createContext<BbsDetailContextProps>({});

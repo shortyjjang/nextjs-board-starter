@@ -1,32 +1,21 @@
-import React, { forwardRef } from "react";
+import  { forwardRef, Ref, TextareaHTMLAttributes } from "react";
+
+interface TextareaProps
+  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "onChange"> {
+  onChange: (value: string) => void;
+}
 
 function Textarea(
-  {
-    onChange,
-    value,
-    id,
-    readOnly,
-    disabled,
-    ...HTMLInputElementProps
-  }: {
-    onChange: (value: string) => void;
-    value: string;
-    id?: string;
-    readOnly?: boolean;
-    disabled?: boolean;
-  },
-  ref: React.Ref<HTMLTextAreaElement>
+  { onChange, ...HTMLInputElementProps }: TextareaProps,
+  ref: Ref<HTMLTextAreaElement>
 ) {
   return (
     <textarea
       ref={ref}
-      value={value}
       onChange={(e) => onChange(e.target.value)}
       {...HTMLInputElementProps}
-      readOnly={readOnly}
-      disabled={disabled}
-      id={id}
     />
   );
 }
+Textarea.displayName = "Textarea";
 export default forwardRef(Textarea);

@@ -1,12 +1,11 @@
-import { BbsContext } from "@/widgets/bbs/board.context";
+import { BbsContext, BbsDetailContext } from "@/widgets/bbs/board.context";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import React, { useContext, useEffect } from "react";
+import  { useContext } from "react";
 import Cookies from "js-cookie";
 import dayjs from "dayjs";
-import useFetch from "@/shared/hook/useFetch";
 
-export default function DefaultDetail() {
+export default function BbsDetailView() {
   const {
     id,
     categoryUseYn,
@@ -14,20 +13,19 @@ export default function DefaultDetail() {
     registerTimeUseYn,
     viewCountUseYn,
     voteUseYn,
-    readRole,
   } = useContext(BbsContext);
   const articleId = useParams().id;
   const router = useRouter();
   const {
-    data: post,
-  }: {
-    data: postProps;
-  } = useFetch(
-    `/api/board/v1/${id}/${articleId}`,
-    {},
-    readRole === "USER" || readRole === "ADMIN" ? true : false,
-    "GET",
-  );
+    title,
+    categoryId,
+    createBy,
+    createTime,
+    viewCount,
+    voteCount,
+    contents,
+    isEditable,
+  } = useContext(BbsDetailContext);
   const deletePost = async () => {
     const request = await axios.post(
       `/api/board/v1/${id}/${articleId}`,
@@ -52,26 +50,26 @@ export default function DefaultDetail() {
   };
   return (
     <div>
-      <div>{post?.title}</div>
+      <div>{title}</div>
       {categoryUseYn === "Y" && (
         <div>
           {
             (categoryList || []).find(
               (category: { id: number; name: string }) =>
-                category.id === post?.categoryId
+                category.id === categoryId
             )?.name
           }
         </div>
       )}
-      <div>{post?.createBy}</div>
+      <div>{createBy}</div>
       {registerTimeUseYn === "Y" && (
-        <div>{dayjs(post?.createTime).format("YYYY-MM-DD")}</div>
+        <div>{dayjs(createTime).format("YYYY-MM-DD")}</div>
       )}
-      {viewCountUseYn === "Y" && <div>{post?.viewCount}</div>}
-      {voteUseYn === "Y" && <div>{post?.voteCount}</div>}
-      <div dangerouslySetInnerHTML={{ __html: post?.contents }} />
+      {viewCountUseYn === "Y" && <div>{viewCount}</div>}
+      {voteUseYn === "Y" && <div>{voteCount}</div>}
+      <div dangerouslySetInnerHTML={{ __html: contents || "" }} />
       <button onClick={() => router.push(`/board/${id}`)}>목록</button>
-      {post?.isEditable && (
+      {isEditable && (
         <div>
           <button>수정</button>
           <button onClick={deletePost}>삭제</button>
@@ -80,3 +78,5 @@ export default function DefaultDetail() {
     </div>
   );
 }
+
+BbsDetailView.displayName = "BbsDetailView";

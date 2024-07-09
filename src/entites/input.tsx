@@ -1,23 +1,18 @@
-import React, { forwardRef } from "react";
+import  { forwardRef, InputHTMLAttributes, Ref } from "react";
+
+interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+  value: string;
+  onChange: (value: string) => void;
+}
 
 function Input(
   {
     onChange,
     value,
     id,
-    readOnly,
-    disabled,
-    placehoder,
     ...HTMLInputElementProps
-  }: {
-    onChange: (value: string) => void;
-    value: string;
-    id?: string;
-    readOnly?: boolean;
-    disabled?: boolean;
-    placehoder?: string;
-  },
-  ref: React.Ref<HTMLInputElement>
+  }: InputProps,
+  ref: Ref<HTMLInputElement>
 ) {
   return (
     <input
@@ -26,10 +21,6 @@ function Input(
       value={value}
       onChange={(e) => onChange(e.target.value)}
       {...HTMLInputElementProps}
-      readOnly={readOnly}
-      disabled={disabled}
-      id={id}
-      placeholder={placehoder}
     />
   );
 }

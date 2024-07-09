@@ -70,7 +70,7 @@ const useFetch = (
       payload: response.data.content,
     });
   }, [body, method, requiredToken, url]);
-  useEffect(() => {
+  useEffect(function onLoad() {
     refetch();
   }, []);
 

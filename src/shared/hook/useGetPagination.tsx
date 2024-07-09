@@ -51,7 +51,7 @@ export default function useGetPagination({
   );
   const [state, dispatch] = useReducer(reducer, PAGING_LIST_INITAL);
 
-  useEffect(() => {
+  useEffect(function settingState() {
     dispatch({
       type: isLoading
         ? "FETCH_INIT"
@@ -64,7 +64,7 @@ export default function useGetPagination({
         currentPage: data?.currentPage,
         totalCount: data?.totalCount,
         totalPagesCount: data?.totalPagesCount,
-        lists: data?.contents,
+        lists: data?.content,
       },
     });
   }, [isLoading, isError, isSuccess, data]);

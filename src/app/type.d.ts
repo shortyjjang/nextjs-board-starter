@@ -13,6 +13,7 @@ interface postProps {
   isEditable: boolean;
   fileList: [];
   commentList: [];
+  score?: number;
 };
 
 
@@ -79,7 +80,7 @@ interface boardListType {
   viewCount: number;
 };
 
-type boardType = "LIST" | "VIEW" | "WRITE" | "EDIT";
+type boardType = "LIST" | "VIEW" | "WRITE" | "EDIT" | "REPLY";
 
 type fetchType = "FETCH_INIT" | "FETCH_SUCCESS" | "FETCH_FAILURE";
 type fetchState = {
@@ -123,4 +124,5 @@ type photoProps = {
   id?: string;
   readOnly?: boolean;
   disabled?: boolean;
+  maxSize?: number;
 }

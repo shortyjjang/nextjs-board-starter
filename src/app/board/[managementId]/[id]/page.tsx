@@ -6,5 +6,6 @@ import { useParams } from "next/navigation";
 
 export default function Post() {
   const { managementId } = useParams();
-  return <Board managementId={Number(managementId)} type={BOARD_TYPES.VIEW} />;
+  if(managementId) return <Board managementId={Number(managementId)} type={BOARD_TYPES.VIEW} />;
+  return null;
 }

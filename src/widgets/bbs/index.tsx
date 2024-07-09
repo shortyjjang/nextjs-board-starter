@@ -1,10 +1,10 @@
 
-import List from "./list/provider";
-import { BbsContext } from "@/widgets/bbs/board.context";
-import Write from "./write";
-import Detail from "./view";
 import { BOARD_TYPES } from "@/app/enum";
 import useFetch from "@/shared/hook/useFetch";
+import BbsListProvider from "./list/provider";
+import BbsDetailProvider from "./detail/provider";
+import { BbsContext } from "./board.context";
+import BbsForm from "./form";
 
 export default function Board({
   managementId,
@@ -20,7 +20,7 @@ export default function Board({
     data: bbsContextProps;
     isSuccess: boolean;
   } = useFetch(`/api/board/v1/management/${managementId}`, {}, false, "GET");
-  return (
+  if(bbsInfo) return (
     <BbsContext.Provider
       value={{
         ...bbsInfo,
@@ -29,14 +29,15 @@ export default function Board({
       {isSuccess && bbsInfo ? (
         <>
           <h2>{bbsInfo.name}</h2>
-          {type === BOARD_TYPES.LIST && <List />}
-          {type === BOARD_TYPES.VIEW && <Detail />}
-          {type === BOARD_TYPES.WRITE && <Write />}
-          {type === BOARD_TYPES.EDIT && <Detail type={BOARD_TYPES.EDIT} />}
+          {type === BOARD_TYPES.LIST ? <BbsListProvider />
+          : type === BOARD_TYPES.WRITE ? <BbsForm />
+          : <BbsDetailProvider type={type} />}
         </>
       ) : (
         <div>로딩중...</div>
       )}
     </BbsContext.Provider>
   );
+  return null;
 }
+Board.displayName = "Board";

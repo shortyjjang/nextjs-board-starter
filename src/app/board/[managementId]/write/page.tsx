@@ -6,5 +6,6 @@ import { useParams } from "next/navigation";
 
 export default function BoardWriteIndex() {
   const { managementId } = useParams();
-  return <Board managementId={Number(managementId)} type={BOARD_TYPES.WRITE} />;
+  if(managementId) return <Board managementId={Number(managementId)} type={BOARD_TYPES.WRITE} />;
+  return null;
 }

@@ -1,19 +1,12 @@
-import { BbsContext } from "@/widgets/bbs/board.context";
-import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
-import React, { createContext, useContext } from "react";
-import Cookies from "js-cookie";
-import dayjs from "dayjs";
-import Write from "../write";
+import { BbsContext, BbsDetailContext } from "@/widgets/bbs/board.context";
+import { useParams, } from "next/navigation";
+import  { useContext } from "react";
 import { BOARD_TYPES } from "@/app/enum";
 import useFetch from "@/shared/hook/useFetch";
 import BbsDetailView from "./view";
+import BbsForm from "../form";
 
-type BbsDetailContextProps = Partial<postProps>;
-
-const BbsDetailContext = createContext<BbsDetailContextProps>({});
-
-export default function BbsViewProvider({
+export default function BbsDetailProvider({
   type = BOARD_TYPES.VIEW,
 }: {
   type?: Omit<boardType, 'LIST' | 'WRITE'>;
@@ -33,8 +26,11 @@ export default function BbsViewProvider({
     readRole === "USER" || readRole === "ADMIN" ? true : false,
     "GET"
   );
-  return (<BbsDetailContext.Provider value={post}>
-    {type === BOARD_TYPES.VIEW && <BbsDetailView />}
-    {type === BOARD_TYPES.EDIT && <Write />}
+  if(post) return (<BbsDetailContext.Provider value={post}>
+    {type === BOARD_TYPES.VIEW ? <BbsDetailView />
+    : <BbsForm type={type} />}
     </BbsDetailContext.Provider>)
+  return null;
 }
+
+BbsDetailProvider.displayName = "BbsDetailProvider";
